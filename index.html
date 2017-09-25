@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: black;
+        }
+        #anim {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #logoSVG {
+            position: absolute;
+            display: block;
+            position: absolute;
+            width: 402px;
+            height: 57px;
+        }
+        .path {
+            stroke-dasharray: 300;
+            stroke-dashoffset: 100;
+            animation: dash 10s linear alternate infinite;
+        }
+        @keyframes dash {
+            from {
+                stroke-dashoffset: 1000;
+            }
+            to {
+                stroke-dashoffset: 100;
+            }
+        }
+    </style>
+    
+    <script src="js/zepto/src/zepto.js"></script>
+    <script src="js/zepto/src/detect.js"></script>
+    <script src="js/zepto/src/event.js"></script>
+    <script src="js/TweenMax.min.js"></script>
+    <script src="js/pixi.min.js"></script>
+    <script src="js/filters.min.js"></script>
+
+</head>
+
+<body>
+    <div id="logoSVG">
+        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="422px" height="57px" viewBox="0 0 402 57" xml:space="preserve">
+  <path class="path" fill="none" stroke="white" stroke-width="1" stroke-miterlimit="10" d="M378.3,41.3c-2.7,0-5-0.7-7.5-2c-1.8-1-2.9-1.9-5.9-4.3l-3.1,10l-9.2-13.7c2.2-0.7,3.6-1.4,4.9-2.2
+    c2.5-1.6,4.1-3.6,4.9-6.3c0.5,2.6,1.7,5,3.4,6.5c2.3,2.2,6.7,3.9,11.3,4.8l1.9,0.4c3.7,0.7,4.9,1.5,4.9,3.2
+    C383.9,39.8,381.7,41.3,378.3,41.3 M340.6,25.6h-3.1V15.5l0.1-0.1h2.8c3.7,0,6,1.9,6,5.1C346.3,23.6,344.1,25.6,340.6,25.6 M29,36.9
+    c-1.5,1.4-4,2.5-5.9,2.5H20V18.2h2.8c5.3,0,8.9,4.2,8.9,10.6C31.7,32.5,30.8,35.1,29,36.9 M395.5,25.8c-1.5-1.3-1.9-1.6-3.1-2.1
+    c-0.8-0.4-0.9-0.4-1.5-0.6c-1.2-0.5-3.5-1-7.6-1.8l-0.4-0.1c-2.8-0.5-4.2-1.7-4.2-3.5c0-1.7,1.3-2.6,3.9-2.6c3.1,0,5.6,0.7,10.7,3
+    l4.2-11.3C391.4,4,387.7,3,383.1,3c-10.6,0-18.3,5-20.4,12.9c-1.1-7.4-6.8-11.4-16.6-11.4h-24.9V41h-20.4v-6.3h13.5v-12h-13.5v-6.2
+    h16v-12h-93.9v23.9h-0.1l-13.4-24h-33.3l-6.3,13.2l-6.3-13.2h-28.4l-6,25.8H129l-6.4-25.8h-14l-6.4,25.9H102L95.9,4.4H48.3v20
+    c-1.6-12.1-10.5-20-23-20H3.5V53h22c12.5,0,21.2-8,22.8-20.1V53h34.8V41H64.9v-6.3h13.5v-12H64.9v-6.2h18.2L92.9,53h16.3l6.3-27.6
+    h0.1l6.1,27.6H138l11.1-41l12.6,19.7V53H178V31.6l14.6-23V53H209V29.1h0.1L222.6,53h16.5V16.4H254V53h16.2V16.4h14V53h53.3V34h0.1
+    l10.2,19h19.4l-2-3c0.5,0.3,1.1,0.6,1.8,0.9c4.2,2.1,8.3,3.1,12.4,3.1c11.8,0,20.2-7.5,20.2-18C399.5,31.6,398.2,28.4,395.5,25.8"/>
+</svg>
+    </div>
+    <div id="anim">
+    </div>
+    <div id="info">Info</div>
+    <script>
+        
+        var _dw = {};
+        _dw.logoMargin = 80;
+        _dw.tl = new TimelineMax({});
+        _dw.app;
+        _dw.lr;
+        _dw.res;
+        _dw.con1;
+        _dw.sl;
+        _dw.con_logo;
+        _dw.SW = 1920;
+        _dw.SH = 1080;
+        _dw.binCounter = 0;
+        _dw.pairsCount = 0;
+        _dw.scrO;
+        
+        _dw.pairs = [
+            ["img1,img2,V"],
+            ["img11,img12,H"],
+            ["img3,img4,V"],
+            ["img13,img14,H"],
+            ["img6,img5,V"],
+            ["img8,img7,V"],
+            ["img11,img12,H"],
+            ["img10,img9,V"],
+            ["img13,img14,H"],
+            ["img3,img4,V"],
+            ["img6,img5,V"]
+        ]
+        
+        _dw.pairsTotal = _dw.pairs.length;
+        function giveBin() {
+            _dw.binCounter += 1;
+            var bin = _dw.binCounter % 2;
+            var sw = 1;
+            if (bin == 0) {
+                sw = -1;
+            }
+            return sw;
+        }
+        
+        function giveMePair() {
+            var k = _dw.pairsCount;
+            var r1 = _dw.pairs[k].toString().split(",")[0];
+            var r2 = _dw.pairs[k].toString().split(",")[1];
+            var mode = _dw.pairs[k].toString().split(",")[2];
+            if (_dw.scrO == 'V') {
+                if (_dw.lr.resources[r1 + '-m'] != undefined) {
+                    var r1 = r1 + '-m';
+                }
+                if (_dw.lr.resources[r2 + '-m'] != undefined) {
+                    var r2 = r2 + '-m';
+                }
+            }
+            _dw.pairsCount += 1;
+            if (_dw.pairsCount >= (_dw.pairsTotal)) {
+                _dw.pairsCount = 0;
+            }
+            return [r1, r2];
+        }
+        
+        function addPair(delay1, delay2) {
+            
+            ////console.log('addPair');
+            sizeChecker()
+            
+            var pair = giveMePair();
+            var t1 = _dw.lr.resources[pair[0]].texture;
+            var t2 = _dw.lr.resources[pair[1]].texture;
+            
+            var p1 = new PIXI.Sprite(t1);
+            var p2 = new PIXI.Sprite(t2);
+            
+            p1.scale.x = _dw.scale;
+            p1.scale.y = _dw.scale;
+            p2.scale.x = _dw.scale;
+            p2.scale.y = _dw.scale;
+            if (p1.height < _dw.appH) {
+            }
+            _dw.sl.addChild(p1);
+            _dw.sl.addChild(p2);
+            if (p1.width < p1.height) {
+                if (_dw.ratio > 1.7777777777777777) {
+                    var nW = _dw.appW / 2;
+                    p1.width = nW;
+                    p2.width = nW;
+                    p1.scale.y = p1.scale.x;
+                    p2.scale.y = p2.scale.x;
+                }
+                if (giveBin() == 1) {
+                    p1.x = _dw.midX;
+                    p2.x = _dw.midX - p2.width;
+                    if (_dw.ratio <= 1) {
+                        var offX = Math.ceil((p1.width - _dw.appW) / 2)
+                        p1.x = -offX;
+                        p2.x = p2.width;
+                    }
+                    _dw.tl.from(p1, 1.3, {
+                        ease: Quint.easeOut,
+                        y: -p1.height
+                    }, delay1)
+                    _dw.tl.from(p2, 1.4, {
+                        ease: Quint.easeOut,
+                        y: _dw.appH,
+                        onComplete: removeBottomPair
+                    }, delay2);
+                } else {
+                    p2.x = _dw.midX;
+                    p1.x = _dw.midX - p1.width;
+                    if (_dw.ratio <= 1) {
+                        var offX = Math.ceil((p1.width - _dw.appW) / 2)
+                        p2.x = -offX;
+                        p1.x = p2.width;
+                    }
+                    _dw.tl.from(p1, 1.3, {
+                        ease: Quint.easeOut,
+                        y: -p2.height
+                    }, delay1)
+                    _dw.tl.from(p2, 1.4, {
+                        ease: Quint.easeOut,
+                        y: _dw.appH,
+                        onComplete: removeBottomPair
+                    }, delay2);
+                }
+            }
+            if (p1.width > p1.height) {
+                if (_dw.ratio > 1.7777777777777777) {
+                    var nW = _dw.appW;
+                    p1.width = nW;
+                    p2.width = nW;
+                    p1.scale.y = p1.scale.x;
+                    p2.scale.y = p2.scale.x;
+                }
+                if (giveBin() == 1) {
+                    var offX = Math.ceil((p1.width - _dw.appW) / 2)
+                    p1.x = -offX;
+                    p1.y = _dw.midY - p1.height;
+                    p2.x = -offX;
+                    p2.y = _dw.midY;
+                    _dw.tl.from(p1, 1.3, {
+                        ease: Quint.easeOut,
+                        x: _dw.appW
+                    }, delay1)
+                    _dw.tl.from(p2, 1.4, {
+                        ease: Quint.easeOut,
+                        x: -p2.width,
+                        onComplete: removeBottomPair
+                    }, delay2);
+                } else {
+                    var offX = Math.ceil((p1.width - _dw.appW) / 2)
+                    p2.x = -offX;
+                    p2.y = _dw.midY - p2.height;
+                    p1.x = -offX;
+                    p1.y = _dw.midY;
+                    _dw.tl.from(p1, 1.3, {
+                        ease: Quint.easeOut,
+                        x: _dw.appW
+                    }, delay1)
+                    _dw.tl.from(p2, 1.4, {
+                        ease: Quint.easeOut,
+                        x: -p2.width,
+                        onComplete: removeBottomPair
+                    }, delay2);
+                }
+            }
+            if (_dw.sl.children.length > 2) {
+                _dw.tl.to(_dw.sl.getChildAt(0), 1, {
+                    alpha: 0
+                }, "-=1.4")
+                _dw.tl.to(_dw.sl.getChildAt(1), 1, {
+                    alpha: 0
+                }, "-=1.4")
+            }
+        }
+        
+        function removeBottomPair() {
+            if (_dw.sl.children.length > 2) {
+                _dw.sl.removeChildAt(0);
+                _dw.sl.removeChildAt(0);
+            }
+            _dw.tl.call(addPair, ["+=2", "-=1.4"]);
+        }
+        
+        function logoAnim() {
+            logo = new PIXI.Sprite(_dw.lr.resources.logo.texture);
+            logo.anchor.set(0.5);
+            logo.x = _dw.midX;
+            logo.y = _dw.midY;
+            logo.width = _dw.appW - _dw.logoMargin;
+            logo.newScale = logo.width / 1921;
+            logo.height = 249 * logo.newScale;
+            _dw.con_logo.addChild(logo);
+            _dw.tl.from(logo, 0.5, {
+                alpha: 0
+            }, "logo+=0");
+            addPair("+=0.1", "-=1.4");
+            if (!!$.os.phone == true || !!$.os.tablet == true) {
+            } else {
+            }
+        }
+        
+        function onAssetsLoaded() {
+            //console.log('onAssetsLoaded');
+            _dw.con1 = new PIXI.Container();
+            _dw.con_logo = new PIXI.Container();
+            _dw.con_lines = new PIXI.Container();
+            _dw.con1.width = _dw.appW;
+            _dw.con1.height = _dw.appH;
+            _dw.app.stage.addChild(_dw.con1);
+            _dw.app.stage.addChild(_dw.con_logo);
+            _dw.app.stage.addChild(_dw.con_lines);
+            _dw.sl = new PIXI.Sprite();
+            _dw.sl.anchor.set(0.5);
+            _dw.sl.interactive = true;
+            _dw.con1.addChild(_dw.sl);
+            logoAnim();
+        }
+        
+        function checkDimension() {
+            _dw.appW = window.innerWidth;
+            _dw.appH = window.innerHeight;
+            _dw.midX = Math.floor(_dw.appW / 2);
+            _dw.midY = Math.floor(_dw.appH / 2);
+            _dw.scale = _dw.appW / _dw.SW;
+        }
+        
+        function setup() {
+            ////console.log('setup'); 
+            _dw.appW = window.innerWidth;
+            _dw.appH = window.innerHeight;
+            _dw.midX = Math.floor(_dw.appW / 2);
+            _dw.midY = Math.floor(_dw.appH / 2);
+            _dw.appOldmidX = _dw.midX;
+            _dw.appOldmidY = _dw.midY;
+            _dw.scale = _dw.appW / _dw.SW;
+            _dw.app = new PIXI.Application(_dw.appW, _dw.appH, {
+                forceCanvas: true,
+                backgroundColor: 0x000000
+            });
+            _dw.legacy = true;
+            PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.LINEAR;
+            anim.appendChild(_dw.app.view);
+            _dw.con1 = new PIXI.Container();
+            _dw.lr = new PIXI.loaders.Loader();
+            _dw.lr.add("logo", "assets/home-split/logo_shadow.png")
+                .add("img1", "assets/home-split/bg-images-d/1.1.jpg")
+                .add("img2", "assets/home-split/bg-images-d/1.2.jpg")
+                .add("img3", "assets/home-split/bg-images-d/2.1.jpg")
+                .add("img4", "assets/home-split/bg-images-d/2.2.jpg")
+                .add("img5", "assets/home-split/bg-images-d/3.1.jpg")
+                .add("img6", "assets/home-split/bg-images-d/3.2.jpg")
+                .add("img7", "assets/home-split/bg-images-d/4.1.jpg")
+                .add("img8", "assets/home-split/bg-images-d/4.2.jpg")
+                .add("img9", "assets/home-split/bg-images-d/5.1.jpg")
+                .add("img10", "assets/home-split/bg-images-d/5.2.jpg")
+                .add("img11", "assets/home-split/bg-images-d/6.1.jpg")
+                .add("img12", "assets/home-split/bg-images-d/6.2.jpg")
+                .add("img13", "assets/home-split/bg-images-d/7.1.jpg")
+                .add("img14", "assets/home-split/bg-images-d/7.2.jpg")
+                .add("img11-m", "assets/home-split/bg-images-d/6.1-m.jpg")
+                .add("img12-m", "assets/home-split/bg-images-d/6.2-m.jpg")
+                .add("img13-m", "assets/home-split/bg-images-d/7.1-m.jpg")
+                .add("img14-m", "assets/home-split/bg-images-d/7.2-m.jpg")
+                .load(function(loader, resources) {})
+            _dw.lr.on('progress', function(e) {
+                if (e.progress == 100) {
+                }
+            });
+            _dw.lr.on('complete', function(e) {
+                //console.log('complete', e.progress);
+                onAssetsLoaded();
+                $('#logoSVG').css('display', 'none');
+            });
+        }
+        
+        function reposLogoSVG() {
+            var W = $(window).width();
+            var H = $(window).height();
+            var oW = $('#logoSVG').width();
+            var oH = $('#logoSVG').height();
+            var nx = Math.floor((W / 2) - (oW / 2));
+            var ny = Math.floor((H / 2) - (oH / 2));
+            $('#logoSVG').css('left', nx + 'px');
+            $('#logoSVG').css('top', ny + 'px');
+        }
+        
+        function sizeChecker() {
+            _dw.appW = window.innerWidth;
+            _dw.appH = window.innerHeight;
+            _dw.midX = Math.floor(_dw.appW / 2);
+            _dw.midY = Math.floor(_dw.appH / 2);
+            _dw.scale = _dw.appW / _dw.SW;
+            _dw.scale = _dw.appH / _dw.SH;
+            _dw.ratio = _dw.appW / _dw.appH;
+            if (_dw.appW < _dw.appH) {
+                _dw.scrO = 'V';
+            } else {
+                _dw.scrO = 'H';
+            }
+        }
+        
+        var resizeTimer;
+        window.addEventListener("resize", function() {
+            
+
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(function() {
+
+            // Run code here, resizing has "stopped"
+            _dw.sl.alpha = 1;
+
+          }, 250);            
+            
+            
+            _dw.sl.alpha = 0;
+            reposLogoSVG();
+            sizeChecker();
+            
+            
+            var pivW = (_dw.appOldmidX - _dw.midX);
+            var pivH = (_dw.appOldmidY - _dw.midY);
+            _dw.con_logo.setTransform(0, 0, 1, 1, 0, 0, 0, pivW, pivH);
+            logo.anchor.set(0.5);
+            logo.width = _dw.appW - _dw.logoMargin;
+            logo.newScale = logo.width / 1920;
+            logo.height = 249 * logo.newScale;
+            _dw.app.view.width = _dw.appW;
+            _dw.app.view.height = _dw.appH;
+            
+
+            
+        });
+        
+        window.addEventListener("orientationchange", function() {
+            window.location.reload();
+        }, false);
+        
+        function init() {
+            reposLogoSVG();
+            setup();
+        }
+        
+        init();
+        
+    </script>
+</body>
+</html>
