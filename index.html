@@ -54,7 +54,6 @@
     <script src="js/zepto/src/event.js"></script>
     <script src="js/TweenMax.min.js"></script>
     <script src="js/pixi.min.js"></script>
-    <script src="js/filters.min.js"></script>
 
 </head>
 
@@ -94,17 +93,17 @@
         _dw.scrO;
         
         _dw.pairs = [
-            ["img1,img2,V"],
-            ["img11,img12,H"],
-            ["img3,img4,V"],
-            ["img13,img14,H"],
-            ["img6,img5,V"],
-            ["img8,img7,V"],
-            ["img11,img12,H"],
-            ["img10,img9,V"],
-            ["img13,img14,H"],
-            ["img3,img4,V"],
-            ["img6,img5,V"]
+            ["img1,img2"],
+            ["img11,img12"],
+            ["img3,img4"],
+            ["img13,img14"],
+            ["img6,img5"],
+            ["img8,img7"],
+            ["img11,img12"],
+            ["img10,img9"],
+            ["img13,img14"],
+            ["img3,img4"],
+            ["img6,img5"]
         ]
         
         _dw.pairsTotal = _dw.pairs.length;
@@ -122,7 +121,7 @@
             var k = _dw.pairsCount;
             var r1 = _dw.pairs[k].toString().split(",")[0];
             var r2 = _dw.pairs[k].toString().split(",")[1];
-            var mode = _dw.pairs[k].toString().split(",")[2];
+            //var mode = _dw.pairs[k].toString().split(",")[2];
             if (_dw.scrO == 'V') {
                 if (_dw.lr.resources[r1 + '-m'] != undefined) {
                     var r1 = r1 + '-m';
