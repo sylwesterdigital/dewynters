@@ -153,25 +153,35 @@
             p1.scale.y = _dw.scale;
             p2.scale.x = _dw.scale;
             p2.scale.y = _dw.scale;
-            if (p1.height < _dw.appH) {
-            }
+            
             _dw.sl.addChild(p1);
             _dw.sl.addChild(p2);
+            
+            
             if (p1.width < p1.height) {
+                
                 if (_dw.ratio > 1.7777777777777777) {
                     var nW = _dw.appW / 2;
                     p1.width = nW;
                     p2.width = nW;
                     p1.scale.y = p1.scale.x;
                     p2.scale.y = p2.scale.x;
+                    
+                    _dw.pairCase = 0;
+                    
                 }
+                
                 if (giveBin() == 1) {
                     p1.x = _dw.midX;
                     p2.x = _dw.midX - p2.width;
+                    
+                    _dw.pairCase = 1;
+                    
                     if (_dw.ratio <= 1) {
                         var offX = Math.ceil((p1.width - _dw.appW) / 2)
                         p1.x = -offX;
                         p2.x = p2.width;
+                        _dw.pairCase = 11;
                     }
                     _dw.tl.from(p1, 1.3, {
                         ease: Quint.easeOut,
@@ -182,13 +192,18 @@
                         y: _dw.appH,
                         onComplete: removeBottomPair
                     }, delay2);
+                    
                 } else {
                     p2.x = _dw.midX;
                     p1.x = _dw.midX - p1.width;
+                    
+                    _dw.pairCase = 2;
+                    
                     if (_dw.ratio <= 1) {
                         var offX = Math.ceil((p1.width - _dw.appW) / 2)
                         p2.x = -offX;
                         p1.x = p2.width;
+                        _dw.pairCase = 22;
                     }
                     _dw.tl.from(p1, 1.3, {
                         ease: Quint.easeOut,
@@ -202,12 +217,15 @@
                 }
             }
             if (p1.width > p1.height) {
+                
                 if (_dw.ratio > 1.7777777777777777) {
                     var nW = _dw.appW;
                     p1.width = nW;
                     p2.width = nW;
                     p1.scale.y = p1.scale.x;
                     p2.scale.y = p2.scale.x;
+                    
+                    _dw.pairCase = 3;
                 }
                 if (giveBin() == 1) {
                     var offX = Math.ceil((p1.width - _dw.appW) / 2)
@@ -215,6 +233,9 @@
                     p1.y = _dw.midY - p1.height;
                     p2.x = -offX;
                     p2.y = _dw.midY;
+                    
+                    _dw.pairCase = 31;
+                    
                     _dw.tl.from(p1, 1.3, {
                         ease: Quint.easeOut,
                         x: _dw.appW
@@ -230,6 +251,9 @@
                     p2.y = _dw.midY - p2.height;
                     p1.x = -offX;
                     p1.y = _dw.midY;
+                    
+                     _dw.pairCase = 32;
+                    
                     _dw.tl.from(p1, 1.3, {
                         ease: Quint.easeOut,
                         x: _dw.appW
@@ -377,6 +401,44 @@
             }
         }
         
+        function ups() {
+            //
+            var p1 =  _dw.sl.getChildAt(0);
+            var p2 =  _dw.sl.getChildAt(1);
+            
+            //p1.scale.x = _dw.scale;
+            //p1.scale.y = _dw.scale;
+            //p2.scale.x = _dw.scale;
+            //p2.scale.y = _dw.scale;
+            
+            console.log(_dw.pairCase);
+            
+//          if (p1.width < p1.height) {
+//                
+//                p1.x = _dw.midX;
+//                p2.x = _dw.midX - p2.width;
+//                if (_dw.ratio <= 1) {
+//                    var offX = Math.ceil((p1.width - _dw.appW) / 2)
+//                    p1.x = -offX;
+//                    p2.x = p2.width;
+//                }
+//                    
+//            }
+//            
+//            if (p1.width > p1.height) {
+//                
+//                    var offX = Math.ceil((p1.width - _dw.appW) / 2)
+//                    p1.x = -offX;
+//                    p1.y = _dw.midY - p1.height;
+//                    p2.x = -offX;
+//                    p2.y = _dw.midY;
+//            }            
+            
+            //console.log(p1.width);
+            
+        }
+        
+        
         var resizeTimer;
         window.addEventListener("resize", function() {
             
@@ -385,15 +447,23 @@
           resizeTimer = setTimeout(function() {
 
             // Run code here, resizing has "stopped"
-            _dw.sl.alpha = 1;
+            //_dw.sl.alpha = 1;
+              
+             // myAnimation.pause();
+              //sizeChecker();
+              _dw.tl.play();
 
           }, 250);            
             
             
-            _dw.sl.alpha = 0;
+            //_dw.sl.alpha = 0;
+            
+            ups();
+            
+            _dw.tl.pause();
+            
             reposLogoSVG();
             sizeChecker();
-            
             
             var pivW = (_dw.appOldmidX - _dw.midX);
             var pivH = (_dw.appOldmidY - _dw.midY);
@@ -402,6 +472,7 @@
             logo.width = _dw.appW - _dw.logoMargin;
             logo.newScale = logo.width / 1920;
             logo.height = 249 * logo.newScale;
+
             _dw.app.view.width = _dw.appW;
             _dw.app.view.height = _dw.appH;
             
