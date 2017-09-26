@@ -157,6 +157,8 @@
             _dw.sl.addChild(p1);
             _dw.sl.addChild(p2);
             
+            //p1.alpha = 0;
+            //p2.alpha = 0;
             
             if (p1.width < p1.height) {
                 
@@ -273,6 +275,12 @@
                     alpha: 0
                 }, "-=1.4")
             }
+            
+            _dw.p1 = p1;
+            _dw.p2 = p2;
+            
+            
+            
         }
         
         function removeBottomPair() {
@@ -402,39 +410,54 @@
         }
         
         function ups() {
+            
+            for(i=0; i<_dw.sl.children.length; i++) {
+                var p = _dw.sl.getChildAt(i);
+                //p.scale.x = _dw.scale;
+                //p.scale.y = _dw.scale;
+                //p.width = nW;
+                //p.scale.x = _dw.scale;
+                //p.scale.y = p2.scale.x;            
+                //console.log(i);
+                p.alpha = 0;
+            }            
+            
+            
             //
-            var p1 =  _dw.sl.getChildAt(0);
-            var p2 =  _dw.sl.getChildAt(1);
-            
-            //p1.scale.x = _dw.scale;
-            //p1.scale.y = _dw.scale;
-            //p2.scale.x = _dw.scale;
-            //p2.scale.y = _dw.scale;
-            
-            console.log(_dw.pairCase);
-            
-//          if (p1.width < p1.height) {
-//                
-//                p1.x = _dw.midX;
-//                p2.x = _dw.midX - p2.width;
-//                if (_dw.ratio <= 1) {
-//                    var offX = Math.ceil((p1.width - _dw.appW) / 2)
-//                    p1.x = -offX;
-//                    p2.x = p2.width;
-//                }
-//                    
+//            var p1 =  _dw.p1;
+//            var p2 =  _dw.p2;
+//            
+//            var i = 0;
+//            
+//            var nW = _dw.appW / 2;            
+//
+//            for(i=0; i<_dw.sl.children.length; i++) {
+//                var p = _dw.sl.getChildAt(i);
+//                p.scale.x = _dw.scale;
+//                p.scale.y = _dw.scale;
+//                p.width = nW;
+//                p.scale.x = _dw.scale;
+//                p.scale.y = p2.scale.x;            
+//                //console.log(i);     
 //            }
 //            
-//            if (p1.width > p1.height) {
+//            if (p1.width < p1.height) {
 //                
-//                    var offX = Math.ceil((p1.width - _dw.appW) / 2)
-//                    p1.x = -offX;
-//                    p1.y = _dw.midY - p1.height;
-//                    p2.x = -offX;
-//                    p2.y = _dw.midY;
-//            }            
+//                if(p1.x < p2.x) {
+//                    p2.x = _dw.midX;
+//                    p1.x = _dw.midX - p1.width;
+//                }
+//                if(p1.x > p2.x) {
+//                    p1.x = _dw.midX;
+//                    p2.x = _dw.midX - p2.width;
+//                }
+//                
+//            }
             
-            //console.log(p1.width);
+            
+            
+            //console.log(_dw.sl.children.length,p1.x, p2.x,p3.x,p4.x);
+            
             
         }
         
