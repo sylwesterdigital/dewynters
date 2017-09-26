@@ -288,7 +288,15 @@
                 _dw.sl.removeChildAt(0);
                 _dw.sl.removeChildAt(0);
             }
-            _dw.tl.call(addPair, ["+=2", "-=1.4"]);
+            
+            if(_dw.afterResize == true) {
+                 _dw.tl.call(addPair, ["+=0.1", "-=1.4"]);
+                _dw.afterResize = false;
+            } else {
+                _dw.tl.call(addPair, ["+=2", "-=1.4"]); 
+            }
+            
+
         }
         
         function logoAnim() {
@@ -474,7 +482,10 @@
               
              // myAnimation.pause();
               //sizeChecker();
-              _dw.tl.play();
+              
+              //removeBottomPair()
+              _dw.afterResize = true;
+              _dw.tl.play(); 
 
           }, 250);            
             
