@@ -169,22 +169,18 @@
                     p2.width = nW;
                     p1.scale.y = p1.scale.x;
                     p2.scale.y = p2.scale.x;
-                    
-                    _dw.pairCase = 0;
-                    
+                    _dw.pcase = 1;
                 }
                 
                 if (giveBin() == 1) {
                     p1.x = _dw.midX;
                     p2.x = _dw.midX - p2.width;
-                    
-                    _dw.pairCase = 1;
-                    
-                    if (_dw.ratio <= 1) {
+                    if (_dw.ratio <= 0.8888888888888888) {
                         var offX = Math.ceil((p1.width - _dw.appW) / 2)
                         p1.x = -offX;
                         p2.x = p2.width;
-                        _dw.pairCase = 11;
+                        _dw.pcase = 2;
+                        
                     }
                     _dw.tl.from(p1, 1.3, {
                         ease: Quint.easeOut,
@@ -199,14 +195,11 @@
                 } else {
                     p2.x = _dw.midX;
                     p1.x = _dw.midX - p1.width;
-                    
-                    _dw.pairCase = 2;
-                    
-                    if (_dw.ratio <= 1) {
+                    if (_dw.ratio <= 0.8888888888888888) {
                         var offX = Math.ceil((p1.width - _dw.appW) / 2)
                         p2.x = -offX;
                         p1.x = p2.width;
-                        _dw.pairCase = 22;
+                        _dw.pcase = 3;
                     }
                     _dw.tl.from(p1, 1.3, {
                         ease: Quint.easeOut,
@@ -227,8 +220,7 @@
                     p2.width = nW;
                     p1.scale.y = p1.scale.x;
                     p2.scale.y = p2.scale.x;
-                    
-                    _dw.pairCase = 3;
+                    _dw.pcase = 4;
                 }
                 if (giveBin() == 1) {
                     var offX = Math.ceil((p1.width - _dw.appW) / 2)
@@ -236,9 +228,7 @@
                     p1.y = _dw.midY - p1.height;
                     p2.x = -offX;
                     p2.y = _dw.midY;
-                    
-                    _dw.pairCase = 31;
-                    
+                    _dw.pcase = 5;
                     _dw.tl.from(p1, 1.3, {
                         ease: Quint.easeOut,
                         x: _dw.appW
@@ -254,9 +244,7 @@
                     p2.y = _dw.midY - p2.height;
                     p1.x = -offX;
                     p1.y = _dw.midY;
-                    
-                     _dw.pairCase = 32;
-                    
+                    _dw.pcase = 6;
                     _dw.tl.from(p1, 1.3, {
                         ease: Quint.easeOut,
                         x: _dw.appW
@@ -279,7 +267,7 @@
             
             _dw.p1 = p1;
             _dw.p2 = p2;
-            
+            console.log('_dw.pcase',_dw.pcase,_dw.scale,_dw.ratio);
             
             
         }
@@ -420,82 +408,26 @@
         
         function ups() {
             
+            var i = 0;
+            
             for(i=0; i<_dw.sl.children.length; i++) {
+                console.log(i)
                 var p = _dw.sl.getChildAt(i);
-                //p.scale.x = _dw.scale;
-                //p.scale.y = _dw.scale;
-                //p.width = nW;
-                //p.scale.x = _dw.scale;
-                //p.scale.y = p2.scale.x;            
-                //console.log(i);
-                
-//                _dw.tl.to(p, 0.5, {
-//                    alpha: 0
-//                })
                 p.alpha = 0;
-            }            
-            
-            
-            //
-//            var p1 =  _dw.p1;
-//            var p2 =  _dw.p2;
-//            
-//            var i = 0;
-//            
-//            var nW = _dw.appW / 2;            
-//
-//            for(i=0; i<_dw.sl.children.length; i++) {
-//                var p = _dw.sl.getChildAt(i);
-//                p.scale.x = _dw.scale;
-//                p.scale.y = _dw.scale;
-//                p.width = nW;
-//                p.scale.x = _dw.scale;
-//                p.scale.y = p2.scale.x;            
-//                //console.log(i);     
-//            }
-//            
-//            if (p1.width < p1.height) {
-//                
-//                if(p1.x < p2.x) {
-//                    p2.x = _dw.midX;
-//                    p1.x = _dw.midX - p1.width;
-//                }
-//                if(p1.x > p2.x) {
-//                    p1.x = _dw.midX;
-//                    p2.x = _dw.midX - p2.width;
-//                }
-//                
-//            }
-            
-            
-            
-            //console.log(_dw.sl.children.length,p1.x, p2.x,p3.x,p4.x);
-            
+            }
             
         }
         
-        
         var resizeTimer;
         window.addEventListener("resize", function() {
-            
 
           clearTimeout(resizeTimer);
           resizeTimer = setTimeout(function() {
 
-            // Run code here, resizing has "stopped"
-            //_dw.sl.alpha = 1;
-              
-             // myAnimation.pause();
-              //sizeChecker();
-              
-              //removeBottomPair()
               _dw.afterResize = true;
               _dw.tl.play(); 
 
-          }, 250);            
-            
-            
-            //_dw.sl.alpha = 0;
+          }, 200);            
             
             ups();
             
@@ -512,8 +444,18 @@
             logo.newScale = logo.width / 1920;
             logo.height = 249 * logo.newScale;
 
+            
+            // THIS IS NOT WORKING WHEN RENDERER SET TO WEBGL
+            // Keep app forceCanvas: true - see below
+                //_dw.app = new PIXI.Application(_dw.appW, _dw.appH, {
+                //    forceCanvas: true,
+                //    backgroundColor: 0x000000
+                //});                        
             _dw.app.view.width = _dw.appW;
             _dw.app.view.height = _dw.appH;
+            
+            
+            //console.log('_dw.scale',_dw.scale);
             
 
             
